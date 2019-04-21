@@ -1,6 +1,3 @@
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -14,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 
-public class PostGameFrame extends JFrame
+public class EndScreenGUI extends JFrame
 {	
 	private static final long serialVersionUID = -9068525477229664170L;
 	private JPanel contentPane;
@@ -22,7 +19,7 @@ public class PostGameFrame extends JFrame
 	/**
 	 * Create the frame.
 	 */
-	public PostGameFrame(Board board, String text)
+	public EndScreenGUI(BoardGUI board, String text)
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 244, 158);
@@ -41,7 +38,7 @@ public class PostGameFrame extends JFrame
 			{
 				board.getFrame().dispose();
 				dispose();
-				Board.main(null);;
+				BoardGUI.main(null);;
 			}
 		});
 		

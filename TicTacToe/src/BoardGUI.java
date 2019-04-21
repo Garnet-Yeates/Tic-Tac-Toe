@@ -18,7 +18,7 @@ import javax.swing.ImageIcon;
  * @author Cuong Le, Garnet Yeates
  * 
  */
-public class Board extends JPanel implements MouseListener
+public class BoardGUI extends JPanel implements MouseListener
 {	
 	public static void main(String[] args)
 	{
@@ -47,13 +47,13 @@ public class Board extends JPanel implements MouseListener
 	private String[][] board;
 	
 	/** Character to represent the player who draws X's */
-	public final char X = 'X';
+	public final Symbol X = new X_Symbol();
 	
 	/** Character to represent the player who draws O's */
-	public final char O = 'O';
+	public final Symbol O = new O_Symbol();
 	
 	/** Pointer to either {@link #X} or {@link #O} depending on whose turn it is */
-	public char currentPlayer = X; 
+	public Symbol currentPlayer = X; 
 	
 	/**
 	 * Constructs a new Board object which starts a new Tic-Tac-Toe game
@@ -62,7 +62,7 @@ public class Board extends JPanel implements MouseListener
 	 * represented by null in the array
 	 * @param container The JFrame that this board exists in
 	 */
-	public Board(JFrame container)
+	public BoardGUI(JFrame container)
 	{
 		this.container = container;
 		board = new String[3][3];
@@ -84,7 +84,7 @@ public class Board extends JPanel implements MouseListener
 			public void run()
 			{
 				JFrame gameFrame = new JFrame();
-				Board board = new Board(gameFrame);
+				BoardGUI board = new BoardGUI(gameFrame);
 				gameFrame.addMouseListener(board);
 			}
 		});
@@ -112,12 +112,12 @@ public class Board extends JPanel implements MouseListener
 	 * @param x the x coordinate clicked in the {@link #board} array
 	 * @param clicker the symbol (x or o) of the player who clicked this spot
 	 */
-	public void onBoardClick(int y, int x, char clicker)
+	public void onBoardClick(int y, int x)
 	{
 		String clicked = board[y][x];
 		if (clicked == null)
 		{
-			board[y][x] = clicker + "";
+			board[y][x] = currentPlayer.getChar() + "";
 			repaint();
 			postTurn();
 		}
@@ -133,7 +133,7 @@ public class Board extends JPanel implements MouseListener
 	{
 		if (!frozen)
 		{
-			if (currentPlayer == X)
+			if (currentPlayer instanceof X_Symbol)
 			{
 				currentPlayer = O;
 			}
@@ -252,7 +252,7 @@ public class Board extends JPanel implements MouseListener
 				int y = (int) container.getBounds().getY();
 				System.out.println(x);
 
-				JFrame frame = new PostGameFrame(Board.this, text);
+				JFrame frame = new EndScreenGUI(BoardGUI.this, text);
 				frame.setBounds(new Rectangle((x + x + PREFERRED_SIZE) / 2, (y + y + PREFERRED_SIZE) / 2, frame.getWidth(), frame.getHeight()));
 				frame.setVisible(true);
 				frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -359,11 +359,11 @@ public class Board extends JPanel implements MouseListener
 				{
 					if (s.equals("X"))
 					{
-						xIcon.paintIcon(this, g, xPos, yPos);
+						X.getImageIcon().paintIcon(this, g, xPos, yPos);
 					}
 					else
 					{
-						oIcon.paintIcon(this, g, xPos, yPos);
+						O.getImageIcon().paintIcon(this, g, xPos, yPos);
 					}
 				}
 				xPos += increment;
@@ -484,7 +484,7 @@ public class Board extends JPanel implements MouseListener
 					arrY = 2;
 				}
 				
-				onBoardClick(arrY, arrX, currentPlayer);
+				onBoardClick(arrY, arrX);
 			}			
 		}
 	}
